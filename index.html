@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>WordPool — Masaüstü & Mobil Kelime Uygulaması</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     :root {
       --outer-bg: #dbe4f0;
@@ -44,10 +45,7 @@
       --shadow: 0 24px 64px rgba(0, 0, 0, 0.6);
     }
 
-    * {
-      box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
-    }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
     body {
       margin: 0;
@@ -64,7 +62,6 @@
       transition: background 0.25s;
     }
 
-    /* ANA UYGULAMA KABUĞU (Responsive Desktop + Mobile) */
     .app-shell {
       width: 100%;
       max-width: 1180px;
@@ -79,7 +76,6 @@
       position: relative;
     }
 
-    /* MASAÜSTÜ SOL KENAR ÇUBUĞU (SIDEBAR) */
     .desktop-sidebar {
       width: 260px;
       background: var(--sidebar-bg);
@@ -90,12 +86,7 @@
       flex-shrink: 0;
     }
 
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 11px;
-      padding: 4px 6px 18px;
-    }
+    .brand { display: flex; align-items: center; gap: 11px; padding: 4px 6px 18px; }
 
     .brand-icon {
       width: 38px;
@@ -115,12 +106,7 @@
     .brand-title { font-weight: 900; font-size: 1.1rem; letter-spacing: -0.2px; }
     .brand-sub { font-size: 0.72rem; color: var(--muted); font-weight: 700; }
 
-    .sidebar-nav {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      flex: 1;
-    }
+    .sidebar-nav { display: flex; flex-direction: column; gap: 6px; flex: 1; }
 
     .side-btn {
       border: 2px solid transparent;
@@ -139,11 +125,7 @@
       text-align: left;
     }
 
-    .side-btn:hover {
-      background: var(--surface-2);
-      color: var(--text);
-    }
-
+    .side-btn:hover { background: var(--surface-2); color: var(--text); }
     .side-btn.active {
       background: rgba(28, 176, 246, 0.12);
       border-color: rgba(28, 176, 246, 0.35);
@@ -169,7 +151,6 @@
       align-items: center;
     }
 
-    /* ANA SAĞ ALAN (Masaüstü Workspace + Mobil Gövde) */
     .main-area {
       flex: 1;
       display: flex;
@@ -178,7 +159,6 @@
       height: 100%;
     }
 
-    /* Üst Bar */
     .app-header {
       padding: 14px 24px;
       background: var(--surface);
@@ -190,16 +170,31 @@
     }
 
     .mobile-brand { display: none; }
+    .desktop-page-title { font-weight: 900; font-size: 1.15rem; }
 
-    .desktop-page-title {
-      font-weight: 900;
-      font-size: 1.15rem;
+    .header-actions { display: flex; align-items: center; gap: 8px; }
+
+    .sync-pill {
+      font-size: 0.74rem;
+      font-weight: 800;
+      padding: 6px 11px;
+      border-radius: 999px;
+      background: var(--surface-2);
+      color: var(--muted);
+      border: 1px solid var(--border);
+      white-space: nowrap;
     }
 
-    .header-actions {
-      display: flex;
-      align-items: center;
-      gap: 8px;
+    .sync-pill.online {
+      background: var(--success-bg);
+      color: var(--primary-dark);
+      border-color: rgba(88, 204, 2, 0.35);
+    }
+
+    .sync-pill.err {
+      background: var(--danger-bg);
+      color: var(--danger);
+      border-color: rgba(255, 75, 75, 0.35);
     }
 
     .icon-btn {
@@ -218,7 +213,6 @@
 
     .icon-btn:active { transform: scale(0.93); }
 
-    /* Kaydırılabilir İçerik */
     .app-content {
       flex: 1;
       overflow-y: auto;
@@ -227,14 +221,10 @@
     }
 
     .app-content::-webkit-scrollbar { width: 6px; }
-    .app-content::-webkit-scrollbar-thumb {
-      background: var(--border);
-      border-radius: 99px;
-    }
+    .app-content::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
 
     .hidden { display: none !important; }
 
-    /* Hero Kart */
     .hero-card {
       background: linear-gradient(135deg, #4f46e5, #1cb0f6);
       color: #fff;
@@ -276,7 +266,6 @@
     .hero-card p { margin: 0; font-size: 0.92rem; opacity: 0.93; line-height: 1.45; }
     .hero-cta-wrap { flex-shrink: 0; min-width: 220px; z-index: 1; }
 
-    /* 3D App Butonları */
     .app-btn {
       width: 100%;
       border: none;
@@ -302,7 +291,6 @@
     .app-btn-white { background: #ffffff; color: #3730a3; box-shadow: 0 4px 0 #c7d2fe; }
     .app-btn-white:active { transform: translateY(3px); box-shadow: 0 1px 0 #c7d2fe; }
 
-    /* İstatistik Kutucukları */
     .tile-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -333,7 +321,6 @@
     .tile-val { font-size: 1.6rem; font-weight: 900; line-height: 1.1; }
     .tile-label { font-size: 0.78rem; color: var(--muted); font-weight: 700; }
 
-    /* Masaüstü 2 Sütunlu Gridler */
     .desktop-two-col {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -365,18 +352,9 @@
       justify-content: space-between;
     }
 
-    /* Quiz Ekranı */
-    .quiz-container-desktop {
-      max-width: 680px;
-      margin: 0 auto;
-    }
+    .quiz-container-desktop { max-width: 680px; margin: 0 auto; }
 
-    .quiz-topbar {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 18px;
-    }
+    .quiz-topbar { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
 
     .quiz-progress-track {
       flex: 1;
@@ -520,7 +498,6 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Sonuç Ekranı */
     .result-hero { text-align: center; padding: 20px 14px; }
     .ring-wrap { position: relative; width: 128px; height: 128px; margin: 0 auto 12px; }
     .ring-text {
@@ -552,7 +529,6 @@
     }
     .wrong-card-sub { font-size: 0.85rem; display: flex; flex-direction: column; gap: 2px; }
 
-    /* Inputlar & Havuz */
     .field-label {
       display: block;
       font-size: 0.75rem;
@@ -577,18 +553,10 @@
       transition: border-color 0.15s;
     }
 
-    .app-input:focus, .app-textarea:focus {
-      border-color: var(--accent);
-      background: var(--surface);
-    }
-
+    .app-input:focus, .app-textarea:focus { border-color: var(--accent); background: var(--surface); }
     .app-textarea { min-height: 92px; resize: vertical; }
 
-    .pool-scroll {
-      max-height: 460px;
-      overflow-y: auto;
-      padding-right: 4px;
-    }
+    .pool-scroll { max-height: 460px; overflow-y: auto; padding-right: 4px; }
 
     .pool-row {
       display: flex;
@@ -616,7 +584,6 @@
       flex-shrink: 0;
     }
 
-    /* MOBİL ALT NAVİGASYON (Sadece Mobilde Görünür) */
     .bottom-nav {
       display: none;
       background: var(--surface);
@@ -644,12 +611,8 @@
       font-weight: 800;
     }
 
-    .nav-item.active {
-      color: var(--accent);
-      background: rgba(28, 176, 246, 0.12);
-    }
+    .nav-item.active { color: var(--accent); background: rgba(28, 176, 246, 0.12); }
 
-    /* Toast Bildirim */
     .toast {
       position: absolute;
       bottom: 24px;
@@ -671,9 +634,6 @@
 
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-    /* ============================================================
-       MOBİL GÖRÜNÜMÜ (Ekran 860px altındaysa otomatik Mobile geç)
-       ============================================================ */
     @media (max-width: 859px) {
       body { padding: 0; }
       .app-shell {
@@ -684,13 +644,13 @@
         border: none;
         flex-direction: column;
       }
-      .desktop-sidebar { display: none; }
-      .desktop-page-title { display: none; }
+      .desktop-sidebar, .desktop-page-title { display: none; }
       .mobile-brand { display: flex; align-items: center; gap: 10px; }
-      .app-header { padding: 14px 18px; }
+      .app-header { padding: 12px 14px; }
       .app-content { padding: 16px; }
       .bottom-nav { display: grid; }
       .toast { bottom: 78px; }
+      .sync-pill { font-size: 0.68rem; padding: 5px 8px; }
 
       .hero-card { flex-direction: column; align-items: stretch; padding: 20px; }
       .hero-cta-wrap { min-width: 0; width: 100%; }
@@ -712,7 +672,7 @@
         <div class="brand-icon">W</div>
         <div>
           <div class="brand-title">WordPool</div>
-          <div class="brand-sub">Masaüstü & Mobil</div>
+          <div class="brand-sub">Supabase Senkron</div>
         </div>
       </div>
 
@@ -748,7 +708,6 @@
 
     <!-- ANA GÖVDE -->
     <div class="main-area">
-      <!-- Üst Bar -->
       <header class="app-header">
         <div class="mobile-brand">
           <div class="brand-icon" style="width:34px; height:34px; font-size:1rem;">W</div>
@@ -760,6 +719,10 @@
         <div id="desktop-title" class="desktop-page-title">Ana Ekran</div>
 
         <div class="header-actions">
+          <span id="sync-status" class="sync-pill">Bağlanıyor...</span>
+          <button id="sync-refresh-btn" class="icon-btn" title="Buluttan Yenile">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+          </button>
           <button id="quick-add-btn" class="icon-btn" title="Hızlı Kelime Ekle">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
           </button>
@@ -769,7 +732,6 @@
         </div>
       </header>
 
-      <!-- İçerik -->
       <main class="app-content">
         <!-- 1. ANA EKRAN -->
         <section id="view-home">
@@ -811,7 +773,6 @@
           </div>
 
           <div class="desktop-two-col">
-            <!-- Sol: Tekrar Bekleyenler Önizleme -->
             <div class="app-card">
               <div class="app-card-title">
                 <span>🔁 Sonraki Testte Tekrar Edilecekler</span>
@@ -819,7 +780,6 @@
               <div id="home-repeat-preview" style="font-size:0.9rem; color:var(--muted);"></div>
             </div>
 
-            <!-- Sağ: Ana Ekrandan Hızlı Kelime Ekleme -->
             <div class="app-card">
               <div class="app-card-title">
                 <span>⚡ Hızlı Kelime Ekle</span>
@@ -836,7 +796,6 @@
         <!-- 2. TEST EKRANI -->
         <section id="view-quiz" class="hidden">
           <div class="quiz-container-desktop">
-            <!-- Aktif Soru -->
             <div id="quiz-active">
               <div class="quiz-topbar">
                 <button id="quit-quiz-btn" class="icon-btn" style="width:34px; height:34px; border-radius:10px;" title="Ana Ekrana Dön">✕</button>
@@ -860,7 +819,6 @@
               </div>
             </div>
 
-            <!-- Test Sonucu -->
             <div id="quiz-result" class="hidden">
               <div class="desktop-two-col">
                 <div class="app-card result-hero">
@@ -945,6 +903,9 @@
   </div>
 
   <script>
+    const SUPABASE_URL = "https://myhwqwglyiotibsffpjy.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_jHbWYe-w6tq-JXRMsM61tA_gzIa-mCC";
+
     const INITIAL_WORDS = [
       { en: "Currently", tr: "Şu anda" },
       { en: "Victim", tr: "Kurban" },
@@ -1057,6 +1018,15 @@
       "view-words": "Kelime Ekle & Havuzu Yönet"
     };
 
+    const isSupabaseConfigured =
+      SUPABASE_URL.startsWith("http") &&
+      SUPABASE_ANON_KEY.length > 20 &&
+      window.supabase;
+
+    const sb = isSupabaseConfigured
+      ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+      : null;
+
     let wordPool = [];
     let wrongQueue = [];
     let appStats = { testsDone: 0, lastScore: null };
@@ -1068,25 +1038,94 @@
     let sessionWrongs = [];
     let currentAnswered = false;
 
-    function loadState() {
+    function setSyncPill(text, stateClass = "") {
+      const el = document.getElementById("sync-status");
+      el.textContent = text;
+      el.className = "sync-pill " + stateClass;
+    }
+
+    function saveLocalCache() {
+      localStorage.setItem(KEYS.words, JSON.stringify(wordPool));
+      localStorage.setItem(KEYS.wrongs, JSON.stringify(wrongQueue));
+      localStorage.setItem(KEYS.stats, JSON.stringify(appStats));
+    }
+
+    async function loadState() {
       const w = localStorage.getItem(KEYS.words);
       wordPool = w ? JSON.parse(w) : [...INITIAL_WORDS];
-      if (!w) saveWords();
-
       const wr = localStorage.getItem(KEYS.wrongs);
       wrongQueue = wr ? JSON.parse(wr) : [];
-
       const st = localStorage.getItem(KEYS.stats);
       if (st) appStats = JSON.parse(st);
 
       if (localStorage.getItem(KEYS.theme) === "dark") {
         document.body.classList.add("dark");
       }
+
+      syncDashboard();
+      if (!sb) {
+        setSyncPill("Yerel Mod");
+        return;
+      }
+
+      await fetchFromSupabase();
     }
 
-    function saveWords() { localStorage.setItem(KEYS.words, JSON.stringify(wordPool)); }
-    function saveWrongs() { localStorage.setItem(KEYS.wrongs, JSON.stringify(wrongQueue)); }
-    function saveStats() { localStorage.setItem(KEYS.stats, JSON.stringify(appStats)); }
+    async function fetchFromSupabase() {
+      if (!sb) return;
+      setSyncPill("Senkronize ediliyor...");
+
+      try {
+        const { data: wordsData, error: wErr } = await sb
+          .from("words")
+          .select("en, tr, is_wrong")
+          .order("id", { ascending: false });
+
+        if (wErr) throw wErr;
+
+        if (!wordsData || wordsData.length === 0) {
+          const seedRows = INITIAL_WORDS.map(item => ({
+            en: item.en,
+            tr: item.tr,
+            is_wrong: false
+          }));
+          const { error: seedErr } = await sb
+            .from("words")
+            .upsert(seedRows, { onConflict: "en", ignoreDuplicates: true });
+          if (seedErr) throw seedErr;
+
+          wordPool = [...INITIAL_WORDS];
+          wrongQueue = [];
+        } else {
+          wordPool = wordsData.map(row => ({ en: row.en, tr: row.tr }));
+          wrongQueue = wordsData.filter(row => row.is_wrong).map(row => row.en);
+        }
+
+        const { data: statData, error: sErr } = await sb
+          .from("app_stats")
+          .select("tests_done, last_score")
+          .eq("id", 1)
+          .maybeSingle();
+
+        if (!sErr && statData) {
+          appStats = {
+            testsDone: statData.tests_done || 0,
+            lastScore: statData.last_score
+          };
+        }
+
+        saveLocalCache();
+        syncDashboard();
+        if (!document.getElementById("view-words").classList.contains("hidden")) {
+          renderPool();
+        }
+        setSyncPill("☁️ Bulut Senkron", "online");
+      } catch (err) {
+        console.error("Supabase hata:", err);
+        setSyncPill("Bağlantı Hatası", "err");
+        showToast("Supabase bağlantısı kurulamadı, yerel veri kullanılıyor");
+      }
+    }
 
     function shuffle(arr) {
       const a = [...arr];
@@ -1114,7 +1153,7 @@
     function syncDashboard() {
       const enSet = new Set(wordPool.map(w => w.en.toLowerCase()));
       wrongQueue = wrongQueue.filter(en => enSet.has(en.toLowerCase()));
-      saveWrongs();
+      saveLocalCache();
 
       document.getElementById("home-total").textContent = wordPool.length;
       document.getElementById("home-wrong").textContent = wrongQueue.length;
@@ -1183,12 +1222,16 @@
       setTimeout(() => document.getElementById("in-en").focus(), 100);
     });
 
+    document.getElementById("sync-refresh-btn").addEventListener("click", async () => {
+      await fetchFromSupabase();
+      showToast("Bulut ile senkronize edildi!");
+    });
+
     document.getElementById("theme-btn").addEventListener("click", () => {
       document.body.classList.toggle("dark");
       localStorage.setItem(KEYS.theme, document.body.classList.contains("dark") ? "dark" : "light");
     });
 
-    // Test Başlatma
     function startQuiz() {
       if (wordPool.length < 5) {
         showToast("Test için havuzda en az 5 kelime olmalı!");
@@ -1271,7 +1314,7 @@
       });
     }
 
-    function selectOption(btnEl, chosenTr) {
+    async function selectOption(btnEl, chosenTr) {
       if (currentAnswered) return;
       currentAnswered = true;
 
@@ -1305,9 +1348,18 @@
         }
       }
 
-      saveWrongs();
+      saveLocalCache();
       nextBtn.textContent = qIndex + 1 === questions.length ? "Sonucu Gör →" : "Sonraki Soru →";
       banner.classList.remove("hidden");
+
+      if (sb) {
+        sb.from("words")
+          .update({ is_wrong: !isCorrect })
+          .eq("en", q.en)
+          .then(({ error }) => {
+            if (error) console.error("Yanlış durumu güncellenemedi:", error);
+          });
+      }
     }
 
     document.getElementById("next-q-btn").addEventListener("click", () => {
@@ -1325,15 +1377,23 @@
       switchView("view-home");
     });
 
-    function finishQuiz() {
+    async function finishQuiz() {
       quizActive = false;
       const total = questions.length;
       const percent = Math.round((correctCount / total) * 100);
 
       appStats.testsDone++;
       appStats.lastScore = percent;
-      saveStats();
+      saveLocalCache();
       syncDashboard();
+
+      if (sb) {
+        sb.from("app_stats")
+          .upsert({ id: 1, tests_done: appStats.testsDone, last_score: appStats.lastScore })
+          .then(({ error }) => {
+            if (error) console.error("İstatistik güncellenemedi:", error);
+          });
+      }
 
       document.getElementById("quiz-active").classList.add("hidden");
       document.getElementById("quiz-result").classList.remove("hidden");
@@ -1377,8 +1437,7 @@
 
     document.getElementById("retry-quiz-btn").addEventListener("click", startQuiz);
 
-    // Ortak Tekli Kelime Ekleme Fonksiyonu
-    function addSingleWord(enInputId, trInputId) {
+    async function addSingleWord(enInputId, trInputId) {
       const enEl = document.getElementById(enInputId);
       const trEl = document.getElementById(trInputId);
       const en = enEl.value.trim();
@@ -1394,19 +1453,28 @@
       }
 
       wordPool.unshift({ en, tr });
-      saveWords();
+      saveLocalCache();
       syncDashboard();
       renderPool();
       enEl.value = "";
       trEl.value = "";
       enEl.focus();
-      showToast(`"${en}" havuza eklendi!`);
+
+      if (sb) {
+        const { error } = await sb.from("words").insert([{ en, tr, is_wrong: false }]);
+        if (error) {
+          console.error(error);
+          showToast(`"${en}" yerelde eklendi (bulut hatası)`);
+          return;
+        }
+      }
+      showToast(`"${en}" eklendi!`);
     }
 
     document.getElementById("btn-add-one").addEventListener("click", () => addSingleWord("in-en", "in-tr"));
     document.getElementById("home-btn-add").addEventListener("click", () => addSingleWord("home-in-en", "home-in-tr"));
 
-    document.getElementById("btn-add-bulk").addEventListener("click", () => {
+    document.getElementById("btn-add-bulk").addEventListener("click", async () => {
       const bulkEl = document.getElementById("in-bulk");
       const lines = bulkEl.value.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
       if (!lines.length) {
@@ -1415,7 +1483,7 @@
       }
 
       const existing = new Set(wordPool.map(w => w.en.toLowerCase()));
-      let added = 0;
+      const newItems = [];
 
       lines.forEach(line => {
         const idx = line.indexOf(" - ");
@@ -1424,16 +1492,30 @@
         const tr = line.slice(idx + 3).trim();
         if (en && tr && !existing.has(en.toLowerCase())) {
           existing.add(en.toLowerCase());
-          wordPool.unshift({ en, tr });
-          added++;
+          newItems.push({ en, tr });
         }
       });
 
-      saveWords();
+      if (!newItems.length) {
+        showToast("Eklenecek yeni kelime bulunamadı");
+        return;
+      }
+
+      wordPool.unshift(...newItems);
+      saveLocalCache();
       syncDashboard();
       renderPool();
       bulkEl.value = "";
-      showToast(`${added} yeni kelime eklendi`);
+
+      if (sb) {
+        const rows = newItems.map(i => ({ en: i.en, tr: i.tr, is_wrong: false }));
+        const { error } = await sb
+          .from("words")
+          .upsert(rows, { onConflict: "en", ignoreDuplicates: true });
+        if (error) console.error(error);
+      }
+
+      showToast(`${newItems.length} yeni kelime eklendi`);
     });
 
     function renderPool() {
@@ -1460,11 +1542,16 @@
           </div>
           <button class="mini-del" title="Sil">✕</button>
         `;
-        row.querySelector(".mini-del").addEventListener("click", () => {
+        row.querySelector(".mini-del").addEventListener("click", async () => {
           wordPool = wordPool.filter(item => item.en !== w.en);
-          saveWords();
+          saveLocalCache();
           syncDashboard();
           renderPool();
+
+          if (sb) {
+            const { error } = await sb.from("words").delete().eq("en", w.en);
+            if (error) console.error(error);
+          }
           showToast(`"${w.en}" silindi`);
         });
         container.appendChild(row);
@@ -1473,19 +1560,25 @@
 
     document.getElementById("in-search").addEventListener("input", renderPool);
 
-    document.getElementById("btn-reset-pool").addEventListener("click", () => {
-      if (confirm("Havuz ilk 96 kelimeye sıfırlansın mı?")) {
-        wordPool = [...INITIAL_WORDS];
-        wrongQueue = [];
-        saveWords();
-        saveWrongs();
-        syncDashboard();
-        renderPool();
-        showToast("Havuz sıfırlandı");
+    document.getElementById("btn-reset-pool").addEventListener("click", async () => {
+      if (!confirm("Havuz ilk 96 kelimeye sıfırlansın ve bulut verisi yenilensin mi?")) return;
+
+      wordPool = [...INITIAL_WORDS];
+      wrongQueue = [];
+      appStats = { testsDone: 0, lastScore: null };
+      saveLocalCache();
+      syncDashboard();
+      renderPool();
+
+      if (sb) {
+        await sb.from("words").delete().neq("id", 0);
+        const seedRows = INITIAL_WORDS.map(i => ({ en: i.en, tr: i.tr, is_wrong: false }));
+        await sb.from("words").insert(seedRows);
+        await sb.from("app_stats").upsert({ id: 1, tests_done: 0, last_score: null });
       }
+      showToast("Havuz sıfırlandı");
     });
 
-    // Masaüstü Klavye Kısayolları (1-5 ve Enter)
     document.addEventListener("keydown", e => {
       if (["INPUT", "TEXTAREA"].includes(e.target.tagName)) return;
       if (document.getElementById("view-quiz").classList.contains("hidden")) return;
@@ -1501,7 +1594,6 @@
     });
 
     loadState();
-    syncDashboard();
   </script>
 </body>
 </html>
